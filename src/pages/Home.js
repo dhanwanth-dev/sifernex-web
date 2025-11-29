@@ -1,13 +1,24 @@
 // src/pages/Home.js
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Spline from '@splinetool/react-spline';
 import Navbar from '../components/Navbar';
-import Footer from "../components/Footer"; // <-- ADDED
+import Footer from "../components/Footer";
+import "./Home.css"; // <-- ADD THIS
 
 const Home = () => {
   const section2Ref = useRef(null);
+
+  const handleSplineLoad = useCallback((spline) => {
+    const width = window.innerWidth;
+
+    if (width < 768) {
+      spline.setZoom(0.7); // MOBILE ZOOM OUT
+    } else {
+      spline.setZoom(1); // DESKTOP NORMAL
+    }
+  }, []);
 
   return (
     <>
@@ -128,11 +139,12 @@ const Home = () => {
       >
         <Spline
           scene="https://prod.spline.design/475k08U9mDaI1fLF/scene.splinecode"
-          style={{ width: '100%', height: '100%', transform: 'scale(1.1)' }}
+          className="spline-canvas"
+          onLoad={handleSplineLoad}
         />
       </section>
 
-      <Footer />  {/* <-- ADDED */}
+      <Footer />
     </>
   );
 };
